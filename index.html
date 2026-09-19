@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ARIN Math Olympiad</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+:root{
+  --bg:#f6f7fb;--panel:#fff;--text:#1a1c2b;--muted:#6b7085;--border:#e3e5ee;
+  --accent:#4f46e5;--accent2:#7c3aed;--good:#16a34a;--bad:#dc2626;--warn:#d97706;
+  --mcq-unans:#eef0f8;--mcq-ans:#4f46e5;--mcq-review:#d97706;
+}
+:root:not([data-theme="light"]){}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#12131c;--panel:#1b1d2a;--text:#eef0f8;--muted:#9498ad;--border:#2c2f42;
+    --mcq-unans:#262941;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#12131c;--panel:#1b1d2a;--text:#eef0f8;--muted:#9498ad;--border:#2c2f42;--mcq-unans:#262941;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.wrap{max-width:900px;margin:0 auto;padding:20px}
+nav{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--border);
+  position:sticky;top:0;background:var(--bg);top:env(safe-area-inset-top,0px);z-index:5}
+nav .brand{font-weight:800;font-size:1.1rem;background:linear-gradient(90deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+button{cursor:pointer;font-family:inherit}
+.btn{padding:10px 18px;border-radius:10px;border:1px solid var(--border);background:var(--panel);color:var(--text);font-size:.95rem}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.btn.ghost{background:transparent}
+.hero{text-align:center;padding:50px 20px}
+.hero h1{font-size:2.1rem;margin-bottom:8px}
+.hero p{color:var(--muted);max-width:520px;margin:0 auto 26px}
+.hero .actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:16px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+select,input[type=text],input[type=number]{width:100%;padding:9px;border-radius:8px;border:1px solid var(--border);
+  background:var(--bg);color:var(--text)}
+label{font-size:.85rem;color:var(--muted);display:block;margin-bottom:4px}
+.hidden{display:none !important}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.timer{font-weight:700;font-variant-numeric:tabular-nums;padding:6px 12px;border-radius:8px;background:var(--mcq-unans)}
+.timer.low{color:var(--bad)}
+.progressbar{height:8px;background:var(--mcq-unans);border-radius:4px;overflow:hidden;margin-bottom:16px}
+.progressbar>div{height:100%;background:var(--accent)}
+.palette{display:grid;grid-template-columns:repeat(auto-fill,minmax(38px,1fr));gap:8px;margin:14px 0}
+.palette button{aspect-ratio:1;border-radius:8px;border:1px solid var(--border);background:var(--mcq-unans);font-size:.85rem}
+.palette button.answered{background:var(--mcq-ans);color:#fff;border-color:var(--mcq-ans)}
+.palette button.review{background:var(--mcq-review);color:#fff;border-color:var(--mcq-review)}
+.palette button.current{outline:2px solid var(--accent2);outline-offset:2px}
+.qmeta{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.tag{font-size:.72rem;padding:3px 9px;border-radius:99px;background:var(--mcq-unans);color:var(--muted)}
+.qtext{font-size:1.05rem;margin-bottom:16px;line-height:1.5}
+.opt{display:block;width:100%;text-align:left;padding:12px 14px;margin-bottom:9px;border-radius:10px;
+  border:1px solid var(--border);background:var(--bg);color:var(--text)}
+.opt.selected{border-color:var(--accent);background:color-mix(in srgb, var(--accent) 12%, var(--bg))}
+.opt.correct{border-color:var(--good);background:color-mix(in srgb, var(--good) 15%, var(--bg))}
+.opt.incorrect{border-color:var(--bad);background:color-mix(in srgb, var(--bad) 15%, var(--bg))}
+.navrow{display:flex;justify-content:space-between;gap:10px;margin-top:16px;flex-wrap:wrap}
+.explain{margin-top:12px;padding:12px;border-radius:10px;background:var(--mcq-unans);font-size:.92rem}
+.scorebig{font-size:2.4rem;font-weight:800;text-align:center}
+.breakdown{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:14px 0}
+.chip{padding:8px 14px;border-radius:10px;background:var(--mcq-unans);font-size:.85rem}
+.reviewq{border-bottom:1px solid var(--border);padding:14px 0}
+.lead{color:var(--muted);font-size:.85rem}
+table.lb{width:100%;border-collapse:collapse}
+table.lb td,table.lb th{padding:8px;border-bottom:1px solid var(--border);text-align:left;font-size:.9rem}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:20}
+.modal{background:var(--panel);border-radius:14px;padding:22px;max-width:360px;text-align:center;border:1px solid var(--border)}
+</style>
+</head>
+<body>
+<nav>
+  <div class="brand">ARIN Math Olympiad</div>
+  <button class="btn ghost" id="themeBtn">🌙</button>
+</nav>
+<div class="wrap" id="app"></div>
+ 
+<script>
+const $=s=>document.querySelector(s);
+const store={
+  get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
+};
+document.getElementById('themeBtn').onclick=()=>{
+  const cur=document.documentElement.getAttribute('data-theme');
+  const next=cur==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',next);
+  store.set('theme',next);
+};
+(function(){const t=store.get('theme');if(t)document.documentElement.setAttribute('data-theme',t);})();
+ 
+// ---- Question bank ----
+const BANK=[
+{topic:'Algebra',diff:'Easy',type:'mcq',q:'If \\(3x+7=22\\), what is \\(x\\)?',opts:['3','5','7','15'],ans:1,exp:'\\(3x=15 \\Rightarrow x=5\\).'},
+{topic:'Number Theory',diff:'Easy',type:'short',q:'What is the smallest prime greater than 50?',ans:'53',exp:'51=3·17, 52 even; 53 is prime.'},
+{topic:'Geometry',diff:'Easy',type:'mcq',q:'A triangle has angles \\(40^\\circ\\) and \\(65^\\circ\\). Find the third angle.',opts:['65°','75°','85°','105°'],ans:1,exp:'\\(180-40-65=75\\).'},
+{topic:'Combinatorics',diff:'Easy',type:'mcq',q:'In how many ways can 3 people be arranged in a row?',opts:['3','6','9','12'],ans:1,exp:'\\(3!=6\\).'},
+{topic:'Algebra',diff:'Medium',type:'short',q:'Solve for x: \\(x^2-5x+6=0\\) (give the larger root).',ans:'3',exp:'Factors as \\((x-2)(x-3)=0\\), roots 2 and 3.'},
+{topic:'Number Theory',diff:'Medium',type:'mcq',q:'What is \\(\\gcd(84,126)\\)?',opts:['6','14','21','42'],ans:3,exp:'\\(84=2^2\\cdot3\\cdot7,\\ 126=2\\cdot3^2\\cdot7\\Rightarrow \\gcd=2\\cdot3\\cdot7=42\\).'},
+{topic:'Geometry',diff:'Medium',type:'short',q:'A circle has radius 7. Find its circumference using \\(\\pi\\approx\\frac{22}{7}\\).',ans:'44',exp:'\\(2\\pi r = 2\\cdot\\frac{22}{7}\\cdot7=44\\).'},
+{topic:'Combinatorics',diff:'Medium',type:'mcq',q:'How many diagonals does a hexagon have?',opts:['6','9','12','15'],ans:1,exp:'\\(\\frac{n(n-3)}{2}=\\frac{6\\cdot3}{2}=9\\).'},
+{topic:'Algebra',diff:'Medium',type:'mcq',q:'If \\(f(x)=2x-1\\), what is \\(f(f(3))\\)?',opts:['7','9','8','10'],ans:1,exp:'\\(f(3)=5,\\ f(5)=9\\).'},
+{topic:'Number Theory',diff:'Hard',type:'short',q:'Find the remainder when \\(7^{100}\\) is divided by 5.',ans:'1',exp:'\\(7\\equiv2\\), and \\(2^{100}=(2^4)^{25}\\equiv1^{25}=1 \\pmod5\\).'},
+{topic:'Geometry',diff:'Hard',type:'mcq',q:'A right triangle has legs 9 and 12. Find its hypotenuse.',opts:['13','14','15','16'],ans:2,exp:'\\(\\sqrt{81+144}=\\sqrt{225}=15\\).'},
+{topic:'Combinatorics',diff:'Hard',type:'short',q:'How many 3-digit numbers have all distinct digits?',ans:'648',exp:'9·9·8 = 648 (first digit ≠0, digits distinct).'},
+{topic:'Algebra',diff:'Hard',type:'mcq',q:'If \\(a+b=10\\) and \\(ab=21\\), find \\(a^2+b^2\\).',opts:['52','58','62','100'],ans:1,exp:'\\((a+b)^2-2ab=100-42=58\\).'},
+{topic:'Geometry',diff:'Hard',type:'mcq',q:'A square is inscribed in a circle of radius 5. Find the square\'s side length.',opts:['5','5√2','10','7.5'],ans:1,exp:'Diagonal = diameter =10, side = \\(10/\\sqrt2=5\\sqrt2\\).'},
+];
+ 
+let state=null;
+ 
+function render(html){$('#app').innerHTML=html; if(window.MathJax) MathJax.typesetPromise();}
+ 
+function Home(){
+  render(`
+  <div class="hero">
+    <h1>ARIN Math Olympiad</h1>
+    <p>Sharpen your problem-solving with olympiad-style questions in Algebra, Geometry, Number Theory, and Combinatorics.</p>
+    <div class="actions">
+      <button class="btn primary" onclick="Setup('practice')">Start Practice Test</button>
+      <button class="btn" onclick="Setup('contest')">Official Contest Mode</button>
+      <button class="btn ghost" onclick="Leaderboard()">Leaderboard</button>
+    </div>
+  </div>`);
+}
+ 
+function Setup(mode){
+  render(`
+  <div class="card">
+    <h2>${mode==='contest'?'Contest Mode':'Practice Mode'} Setup</h2>
+    <div class="grid2">
+      <div><label>Number of questions</label>
+        <select id="numQ"><option>5</option><option selected>10</option><option>${BANK.length}</option></select></div>
+      <div><label>Difficulty</label>
+        <select id="diff"><option>Mixed</option><option>Easy</option><option>Medium</option><option>Hard</option></select></div>
+      <div><label>Your name (for leaderboard)</label><input type="text" id="uname" placeholder="Guest"></div>
+      <div><label>Time limit (minutes)</label><input type="number" id="tlim" value="${mode==='contest'?15:20}"></div>
+    </div>
+    <div class="navrow">
+      <button class="btn ghost" onclick="Home()">Back</button>
+      <button class="btn primary" onclick="startQuiz('${mode}')">Begin</button>
+    </div>
+  </div>`);
+}
+ 
+function startQuiz(mode){
+  const n=+$('#numQ').value, diff=$('#diff').value, name=$('#uname').value.trim()||'Guest';
+  const t=+$('#tlim').value*60;
+  let pool=BANK.filter(q=>diff==='Mixed'||q.diff===diff);
+  if(pool.length<n) pool=BANK;
+  const qs=[...pool].sort(()=>Math.random()-0.5).slice(0,n);
+  state={mode,name,qs,cur:0,answers:Array(qs.length).fill(null),marked:Array(qs.length).fill(false),
+    timeLeft:t,startTime:Date.now(),submitted:false};
+  store.set('arin_progress',state);
+  tick();
+  Quiz();
+}
+ 
+let timerId=null;
+function tick(){
+  clearInterval(timerId);
+  timerId=setInterval(()=>{
+    if(!state||state.submitted) return clearInterval(timerId);
+    state.timeLeft--;
+    const el=$('#timerEl');
+    if(el) el.textContent=fmt(state.timeLeft);
+    if(el && state.timeLeft<60) el.classList.add('low');
+    if(state.timeLeft<=0){ clearInterval(timerId); submitQuiz(); }
+  },1000);
+}
+function fmt(s){s=Math.max(0,s);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
+ 
+function Quiz(){
+  const {qs,cur,answers,marked}=state;
+  const q=qs[cur];
+  const answered=answers.filter(a=>a!==null).length;
+  render(`
+  <div class="topbar">
+    <div class="lead">Question ${cur+1} of ${qs.length} · ${answered} answered</div>
+    <div class="timer" id="timerEl">${fmt(state.timeLeft)}</div>
+  </div>
+  <div class="progressbar"><div style="width:${((cur+1)/qs.length)*100}%"></div></div>
+  <div class="palette">
+    ${qs.map((_,i)=>`<button class="${i===cur?'current ':''}${marked[i]?'review':(answers[i]!==null?'answered':'')}" onclick="goTo(${i})">${i+1}</button>`).join('')}
+  </div>
+  <div class="card">
+    <div class="qmeta"><span class="tag">${q.topic}</span><span class="tag">${q.diff}</span></div>
+    <div class="qtext">${q.q}</div>
+    ${q.type==='mcq'
+      ? q.opts.map((o,i)=>`<button class="opt ${answers[cur]===i?'selected':''}" onclick="selectOpt(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join('')
+      : `<input type="text" id="shortAns" placeholder="Your answer" value="${answers[cur]??''}" oninput="selectShort(this.value)">`
+    }
+    ${state.mode==='practice' && answers[cur]!==null ? feedbackHtml(q,answers[cur]) : ''}
+    <div class="navrow">
+      <div>
+        <button class="btn ghost" onclick="prevQ()" ${cur===0?'disabled':''}>Previous</button>
+        <button class="btn ghost" onclick="toggleMark()">${marked[cur]?'Unmark':'Mark for review'}</button>
+      </div>
+      <div>
+        ${cur<qs.length-1 ? `<button class="btn primary" onclick="nextQ()">Next</button>` : `<button class="btn primary" onclick="confirmSubmit()">Submit</button>`}
+      </div>
+    </div>
+  </div>`);
+}
+function feedbackHtml(q,given){
+  const correct=q.type==='mcq'?given===q.ans:String(given).trim()===String(q.ans).trim();
+  return `<div class="explain">${correct?'✅ Correct.':'❌ Not quite.'} ${q.exp}</div>`;
+}
+function goTo(i){state.cur=i;save();Quiz();}
+function selectOpt(i){state.answers[state.cur]=i;save();Quiz();}
+function selectShort(v){state.answers[state.cur]=v;save();}
+function toggleMark(){state.marked[state.cur]=!state.marked[state.cur];save();Quiz();}
+function nextQ(){state.cur=Math.min(state.cur+1,state.qs.length-1);save();Quiz();}
+function prevQ(){state.cur=Math.max(state.cur-1,0);save();Quiz();}
+function save(){store.set('arin_progress',state);}
+ 
+function confirmSubmit(){
+  const unanswered=state.answers.filter(a=>a===null).length;
+  if(unanswered>0){
+    render($('#app').innerHTML+`
+    <div class="modal-bg"><div class="modal">
+      <p><strong>${unanswered}</strong> question(s) unanswered. Submit anyway?</p>
+      <div class="navrow"><button class="btn ghost" onclick="Quiz()">Go back</button>
+      <button class="btn primary" onclick="submitQuiz()">Submit</button></div>
+    </div></div>`);
+  } else submitQuiz();
+}
+ 
+function submitQuiz(){
+  clearInterval(timerId);
+  state.submitted=true;
+  const {qs,answers}=state;
+  let correct=0;
+  const byDiff={};
+  qs.forEach((q,i)=>{
+    const ok=q.type==='mcq'?answers[i]===q.ans:(answers[i]!==null && String(answers[i]).trim()===String(q.ans).trim());
+    if(ok)correct++;
+    byDiff[q.diff]=byDiff[q.diff]||{c:0,t:0};
+    byDiff[q.diff].t++; if(ok)byDiff[q.diff].c++;
+  });
+  const pct=Math.round(100*correct/qs.length);
+  const lb=store.get('arin_leaderboard',[]);
+  lb.push({name:state.name,score:correct,total:qs.length,pct,mode:state.mode,date:new Date().toLocaleDateString()});
+  lb.sort((a,b)=>b.pct-a.pct);
+  store.set('arin_leaderboard',lb.slice(0,25));
+  Results(correct,pct,byDiff);
+}
+ 
+function Results(correct,pct,byDiff){
+  const {qs,answers}=state;
+  render(`
+  <div class="card" style="text-align:center">
+    <div class="lead">Your Result</div>
+    <div class="scorebig">${correct}/${qs.length}</div>
+    <div class="lead">${pct}% correct</div>
+    <div class="breakdown">
+      ${Object.entries(byDiff).map(([d,v])=>`<span class="chip">${d}: ${v.c}/${v.t}</span>`).join('')}
+    </div>
+    <div class="navrow" style="justify-content:center">
+      <button class="btn" onclick="Home()">Home</button>
+      <button class="btn" onclick="Setup(state.mode)">Retake</button>
+      <button class="btn primary" onclick="ReviewMode()">Review Answers</button>
+    </div>
+  </div>`);
+}
+ 
+function ReviewMode(){
+  const {qs,answers}=state;
+  render(`
+  <div class="card"><h2>Review</h2>
+  ${qs.map((q,i)=>{
+    const given=answers[i];
+    let givenText, correctText, ok;
+    if(q.type==='mcq'){
+      ok=given===q.ans;
+      givenText=given!==null?`${String.fromCharCode(65+given)}. ${q.opts[given]}`:'— no answer —';
+      correctText=`${String.fromCharCode(65+q.ans)}. ${q.opts[q.ans]}`;
+    } else {
+      ok=given!==null && String(given).trim()===String(q.ans).trim();
+      givenText=given??'— no answer —'; correctText=q.ans;
+    }
+    return `<div class="reviewq">
+      <div class="qmeta"><span class="tag">${q.topic}</span><span class="tag">${q.diff}</span></div>
+      <div class="qtext">${i+1}. ${q.q}</div>
+      <div>Your answer: <strong style="color:${ok?'var(--good)':'var(--bad)'}">${givenText}</strong></div>
+      ${!ok?`<div>Correct answer: <strong>${correctText}</strong></div>`:''}
+      <div class="explain">${q.exp}</div>
+    </div>`;
+  }).join('')}
+  <div class="navrow"><button class="btn" onclick="Home()">Home</button></div>
+  </div>`);
+}
+ 
+function Leaderboard(){
+  const lb=store.get('arin_leaderboard',[]);
+  render(`
+  <div class="card"><h2>Leaderboard</h2>
+  <p class="lead">Stored on this device only.</p>
+  <table class="lb"><tr><th>#</th><th>Name</th><th>Score</th><th>%</th><th>Mode</th><th>Date</th></tr>
+  ${lb.length?lb.map((r,i)=>`<tr><td>${i+1}</td><td>${r.name}</td><td>${r.score}/${r.total}</td><td>${r.pct}%</td><td>${r.mode}</td><td>${r.date}</td></tr>`).join(''):'<tr><td colspan="6" class="lead">No scores yet — take a test!</td></tr>'}
+  </table>
+  <div class="navrow"><button class="btn" onclick="Home()">Home</button></div>
+  </div>`);
+}
+ 
+Home();
+</script>
+</body>
+</html>
