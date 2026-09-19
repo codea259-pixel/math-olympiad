@@ -81,7 +81,7 @@ table.lb td,table.lb th{padding:8px;border-bottom:1px solid var(--border);text-a
   <button class="btn ghost" id="themeBtn">🌙</button>
 </nav>
 <div class="wrap" id="app"></div>
- 
+
 <script>
 const $=s=>document.querySelector(s);
 const store={
@@ -95,34 +95,34 @@ document.getElementById('themeBtn').onclick=()=>{
   store.set('theme',next);
 };
 (function(){const t=store.get('theme');if(t)document.documentElement.setAttribute('data-theme',t);})();
- 
+
 // ---- Question bank ----
 const BANK=[
-{topic:'Algebra',diff:'Easy',type:'mcq',q:'If \\(3x+7=22\\), what is \\(x\\)?',opts:['3','5','7','15'],ans:1,exp:'\\(3x=15 \\Rightarrow x=5\\).'},
-{topic:'Number Theory',diff:'Easy',type:'short',q:'What is the smallest prime greater than 50?',ans:'53',exp:'51=3·17, 52 even; 53 is prime.'},
-{topic:'Geometry',diff:'Easy',type:'mcq',q:'A triangle has angles \\(40^\\circ\\) and \\(65^\\circ\\). Find the third angle.',opts:['65°','75°','85°','105°'],ans:1,exp:'\\(180-40-65=75\\).'},
-{topic:'Combinatorics',diff:'Easy',type:'mcq',q:'In how many ways can 3 people be arranged in a row?',opts:['3','6','9','12'],ans:1,exp:'\\(3!=6\\).'},
-{topic:'Algebra',diff:'Medium',type:'short',q:'Solve for x: \\(x^2-5x+6=0\\) (give the larger root).',ans:'3',exp:'Factors as \\((x-2)(x-3)=0\\), roots 2 and 3.'},
-{topic:'Number Theory',diff:'Medium',type:'mcq',q:'What is \\(\\gcd(84,126)\\)?',opts:['6','14','21','42'],ans:3,exp:'\\(84=2^2\\cdot3\\cdot7,\\ 126=2\\cdot3^2\\cdot7\\Rightarrow \\gcd=2\\cdot3\\cdot7=42\\).'},
-{topic:'Geometry',diff:'Medium',type:'short',q:'A circle has radius 7. Find its circumference using \\(\\pi\\approx\\frac{22}{7}\\).',ans:'44',exp:'\\(2\\pi r = 2\\cdot\\frac{22}{7}\\cdot7=44\\).'},
-{topic:'Combinatorics',diff:'Medium',type:'mcq',q:'How many diagonals does a hexagon have?',opts:['6','9','12','15'],ans:1,exp:'\\(\\frac{n(n-3)}{2}=\\frac{6\\cdot3}{2}=9\\).'},
-{topic:'Algebra',diff:'Medium',type:'mcq',q:'If \\(f(x)=2x-1\\), what is \\(f(f(3))\\)?',opts:['7','9','8','10'],ans:1,exp:'\\(f(3)=5,\\ f(5)=9\\).'},
-{topic:'Number Theory',diff:'Hard',type:'short',q:'Find the remainder when \\(7^{100}\\) is divided by 5.',ans:'1',exp:'\\(7\\equiv2\\), and \\(2^{100}=(2^4)^{25}\\equiv1^{25}=1 \\pmod5\\).'},
-{topic:'Geometry',diff:'Hard',type:'mcq',q:'A right triangle has legs 9 and 12. Find its hypotenuse.',opts:['13','14','15','16'],ans:2,exp:'\\(\\sqrt{81+144}=\\sqrt{225}=15\\).'},
-{topic:'Combinatorics',diff:'Hard',type:'short',q:'How many 3-digit numbers have all distinct digits?',ans:'648',exp:'9·9·8 = 648 (first digit ≠0, digits distinct).'},
-{topic:'Algebra',diff:'Hard',type:'mcq',q:'If \\(a+b=10\\) and \\(ab=21\\), find \\(a^2+b^2\\).',opts:['52','58','62','100'],ans:1,exp:'\\((a+b)^2-2ab=100-42=58\\).'},
-{topic:'Geometry',diff:'Hard',type:'mcq',q:'A square is inscribed in a circle of radius 5. Find the square\'s side length.',opts:['5','5√2','10','7.5'],ans:1,exp:'Diagonal = diameter =10, side = \\(10/\\sqrt2=5\\sqrt2\\).'},
+{topic:'Arithmetic',diff:'Easy',type:'mcq',q:'What is \\(347+568\\)?',opts:['805','905','915','1015'],ans:1,exp:'\\(347+568=915\\).'},
+{topic:'Fractions',diff:'Easy',type:'mcq',q:'Which fraction is equivalent to \\(\\frac{2}{3}\\)?',opts:['\\(\\frac{4}{9}\\)','\\(\\frac{6}{9}\\)','\\(\\frac{3}{6}\\)','\\(\\frac{5}{6}\\)'],ans:1,exp:'Multiply top and bottom by 3: \\(\\frac{2\\times3}{3\\times3}=\\frac{6}{9}\\).'},
+{topic:'Geometry',diff:'Easy',type:'short',q:'A rectangle is 6 cm long and 4 cm wide. What is its perimeter, in cm?',ans:'20',exp:'\\(P=2(6+4)=20\\) cm.'},
+{topic:'Patterns',diff:'Easy',type:'short',q:'What is the next number in the pattern: 2, 5, 8, 11, ___?',ans:'14',exp:'Each term increases by 3, so \\(11+3=14\\).'},
+{topic:'Arithmetic',diff:'Easy',type:'mcq',q:'What is \\(9\\times7\\)?',opts:['54','56','63','72'],ans:2,exp:'\\(9\\times7=63\\).'},
+{topic:'Word Problems',diff:'Medium',type:'short',q:'Maya has 3 bags with 24 marbles each. She gives away 15 marbles. How many does she have left?',ans:'57',exp:'\\(3\\times24=72,\\ 72-15=57\\).'},
+{topic:'Fractions',diff:'Medium',type:'mcq',q:'What is \\(\\frac{1}{4}+\\frac{1}{2}\\)?',opts:['\\(\\frac{1}{6}\\)','\\(\\frac{2}{6}\\)','\\(\\frac{3}{4}\\)','\\(\\frac{2}{4}\\)'],ans:2,exp:'\\(\\frac{1}{4}+\\frac{2}{4}=\\frac{3}{4}\\).'},
+{topic:'Geometry',diff:'Medium',type:'mcq',q:'A square has an area of 49 square cm. What is the length of one side?',opts:['6 cm','7 cm','8 cm','9 cm'],ans:1,exp:'\\(7\\times7=49\\), so the side is 7 cm.'},
+{topic:'Number Sense',diff:'Medium',type:'mcq',q:'Which of these numbers is divisible by both 3 and 4?',opts:['18','20','24','28'],ans:2,exp:'24 is divisible by 3 (2+4=6) and by 4 (\\(24\\div4=6\\)).'},
+{topic:'Patterns',diff:'Medium',type:'short',q:'A sequence starts at 100 and each term is half the one before. What is the 4th term? (100, 50, 25, ___)',ans:'12.5',exp:'\\(25\\div2=12.5\\).'},
+{topic:'Word Problems',diff:'Hard',type:'short',q:'A book has 240 pages. Alex reads \\(\\frac{1}{3}\\) of it on Monday and \\(\\frac{1}{4}\\) of the remaining pages on Tuesday. How many pages are left after Tuesday?',ans:'120',exp:'Monday: \\(240\\div3=80\\) pages, 160 left. Tuesday: \\(160\\div4=40\\) pages, so \\(160-40=120\\) left.'},
+{topic:'Geometry',diff:'Hard',type:'mcq',q:'A rectangular garden is 12 m by 8 m. A 2 m wide path runs around the outside. What is the area of the path alone, in square meters?',opts:['64','88','96','128'],ans:2,exp:'Outer rectangle (adding 2 m on every side): \\(16\\times12=192\\). Garden area: \\(12\\times8=96\\). Path area: \\(192-96=96\\) sq m.'},
+{topic:'Number Sense',diff:'Hard',type:'short',q:'What is the sum of all the factors of 28 (including 1 and 28)?',ans:'56',exp:'Factors: 1,2,4,7,14,28. Sum \\(=1+2+4+7+14+28=56\\).'},
+{topic:'Combinatorics',diff:'Hard',type:'mcq',q:'How many different 2-digit numbers can be made using the digits 1, 2, and 3 without repeating a digit?',opts:['3','6','9','12'],ans:1,exp:'3 choices for the first digit, 2 remaining for the second: \\(3\\times2=6\\).'},
 ];
- 
+
 let state=null;
- 
+
 function render(html){$('#app').innerHTML=html; if(window.MathJax) MathJax.typesetPromise();}
- 
+
 function Home(){
   render(`
   <div class="hero">
-    <h1>ARIN Math Olympiad</h1>
-    <p>Sharpen your problem-solving with olympiad-style questions in Algebra, Geometry, Number Theory, and Combinatorics.</p>
+    <h1>ARIN Math Olympiad — Division A</h1>
+    <p>5th-grade level practice: arithmetic, fractions, geometry, patterns, and word problems, in olympiad style.</p>
     <div class="actions">
       <button class="btn primary" onclick="Setup('practice')">Start Practice Test</button>
       <button class="btn" onclick="Setup('contest')">Official Contest Mode</button>
@@ -130,7 +130,7 @@ function Home(){
     </div>
   </div>`);
 }
- 
+
 function Setup(mode){
   render(`
   <div class="card">
@@ -141,7 +141,7 @@ function Setup(mode){
       <div><label>Difficulty</label>
         <select id="diff"><option>Mixed</option><option>Easy</option><option>Medium</option><option>Hard</option></select></div>
       <div><label>Your name (for leaderboard)</label><input type="text" id="uname" placeholder="Guest"></div>
-      <div><label>Time limit (minutes)</label><input type="number" id="tlim" value="${mode==='contest'?15:20}"></div>
+      <div><label>Time limit (minutes)</label><input type="number" id="tlim" value="${mode==='contest'?20:25}"></div>
     </div>
     <div class="navrow">
       <button class="btn ghost" onclick="Home()">Back</button>
@@ -149,7 +149,7 @@ function Setup(mode){
     </div>
   </div>`);
 }
- 
+
 function startQuiz(mode){
   const n=+$('#numQ').value, diff=$('#diff').value, name=$('#uname').value.trim()||'Guest';
   const t=+$('#tlim').value*60;
@@ -162,7 +162,7 @@ function startQuiz(mode){
   tick();
   Quiz();
 }
- 
+
 let timerId=null;
 function tick(){
   clearInterval(timerId);
@@ -176,7 +176,7 @@ function tick(){
   },1000);
 }
 function fmt(s){s=Math.max(0,s);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
- 
+
 function Quiz(){
   const {qs,cur,answers,marked}=state;
   const q=qs[cur];
@@ -220,7 +220,7 @@ function toggleMark(){state.marked[state.cur]=!state.marked[state.cur];save();Qu
 function nextQ(){state.cur=Math.min(state.cur+1,state.qs.length-1);save();Quiz();}
 function prevQ(){state.cur=Math.max(state.cur-1,0);save();Quiz();}
 function save(){store.set('arin_progress',state);}
- 
+
 function confirmSubmit(){
   const unanswered=state.answers.filter(a=>a===null).length;
   if(unanswered>0){
@@ -232,7 +232,7 @@ function confirmSubmit(){
     </div></div>`);
   } else submitQuiz();
 }
- 
+
 function submitQuiz(){
   clearInterval(timerId);
   state.submitted=true;
@@ -252,7 +252,7 @@ function submitQuiz(){
   store.set('arin_leaderboard',lb.slice(0,25));
   Results(correct,pct,byDiff);
 }
- 
+
 function Results(correct,pct,byDiff){
   const {qs,answers}=state;
   render(`
@@ -270,7 +270,7 @@ function Results(correct,pct,byDiff){
     </div>
   </div>`);
 }
- 
+
 function ReviewMode(){
   const {qs,answers}=state;
   render(`
@@ -297,7 +297,7 @@ function ReviewMode(){
   <div class="navrow"><button class="btn" onclick="Home()">Home</button></div>
   </div>`);
 }
- 
+
 function Leaderboard(){
   const lb=store.get('arin_leaderboard',[]);
   render(`
@@ -309,7 +309,7 @@ function Leaderboard(){
   <div class="navrow"><button class="btn" onclick="Home()">Home</button></div>
   </div>`);
 }
- 
+
 Home();
 </script>
 </body>
